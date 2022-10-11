@@ -9,13 +9,17 @@ from .decorators import *
 
 
 def index(request):
-    return render(request, 'login.html')
+    if not 'profesional' in request.session or not request.session['profesional']:
+        return render(request, 'login.html')
+    return redirect("/home")
 
 def registerForm(request):
     context ={
         "profesiones":Profesiones.objects.all()
     }
-    return render(request, 'register.html', context)
+    if not 'profesional' in request.session or not request.session['profesional']:
+        return render(request, 'register.html',context)
+    return redirect("/home")
 
 def new(request):
     print(request.POST)
@@ -53,13 +57,13 @@ def logged(request):
             messages.error(request, 'Datos no validos')
         else:
             request.session["profesional"]=profesional
-            print(request.session["profesional"])
             return redirect("/home")
 
     except:
         messages.error(request, 'Datos no validos')
     
     return redirect("/")
+
 @loginauth
 def home(request):
     print(request.session['profesional'])
@@ -68,8 +72,6 @@ def home(request):
     }
     return render(request,'index.html',data)
 
-def login(request):
-    pass
 
 def register(request):
     pass
