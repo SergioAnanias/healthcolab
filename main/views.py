@@ -7,10 +7,15 @@ from django.core import serializers
 from django.forms.models import model_to_dict
 from .decorators import *
 
+
 def index(request):
+    if request.session["profesional"]:
+        return redirect("/home")
     return render(request, 'login.html')
 
 def registerForm(request):
+    if request.session["profesional"]:
+        return redirect("/home")
     context ={
         "profesiones":Profesiones.objects.all()
     }
