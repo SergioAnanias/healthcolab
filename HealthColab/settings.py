@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-xaffa=oil3zf1=^600ilh6!yt#ejuob@h8!)w_3+s^7hy%bzkq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['144.22.48.203']
-STATIC_ROOT = os.path.join(BASE_DIR,"static/")
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -77,9 +77,8 @@ WSGI_APPLICATION = 'HealthColab.wsgi.application'
 DATABASES = {
     'default': {
     'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'healthcolab',
+    'NAME': 'mydb',
     'USER': 'root',
-    'PASSWORD':'12345',
     'HOST': 'localhost',
     'PORT': '3306',
     }
