@@ -31,7 +31,7 @@
         {% if request.session.profesional %}
         <ul class="navbar-nav ml-auto">
             <li class="nav-link ">
-                Hola, {{ usuario.nombres }} {{ usuario.apellidos }}
+                Hola, {{ usuario.nombres }} {{ usuario.apellidos }} (<a href="/edit">Editar Perfil</a>)
             </li>
             <form class="form-inline my-2 my-lg-0">
                 <a href="/logout" class="btn btn-danger">Logout</a>
