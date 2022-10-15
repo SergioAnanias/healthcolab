@@ -12,6 +12,7 @@ from datetime import datetime, date
 
 class ProfesionalesManager(models.Manager):
     def validator(self, postData):
+        print(postData)
         errors={}
         if len(postData["rut"]) == 0:
             errors["rut"] = "El campo rut se encuentra vacio"

@@ -6,6 +6,7 @@ import json
 from django.core import serializers
 from django.forms.models import model_to_dict
 from .decorators import *
+from django.http import JsonResponse
 
 
 def index(request):
@@ -22,22 +23,24 @@ def registerForm(request):
     return redirect("/home")
 
 def new(request):
-    print(request.POST)
-    errors = Profesionales.objects.validator(request.POST)
+    post_data = json.load(request)['profesional']
+    print(post_data)
+    errors = Profesionales.objects.validator(post_data)
         # En caso de que se devuelvan errores del validador, se guardan con messages y se redirecciona al formulario de registro para mostrarlos
     if len(errors) > 0:
+        errorsarray=[]
         for k, v in errors.items():
-            messages.error(request, v)
-        return redirect("/register")
-    pwhash = bcrypt.hashpw(request.POST["password"].encode(), bcrypt.gensalt()).decode()
+            errorsarray.append(v)
+        return JsonResponse({'errors':errorsarray}, status=500)
+    pwhash = bcrypt.hashpw(post_data["password"].encode(), bcrypt.gensalt()).decode()
     profesional = Profesionales.objects.create(
-        rut=request.POST["rut"],
-        nombres= request.POST["nombres"],
-        apellidos=request.POST["apellidos"],
-        numregistro=request.POST["nregistro"],
-        profesiones_idprofesiones= Profesiones.objects.get(idprofesiones=request.POST["profesiones"]),
+        rut=post_data["rut"],
+        nombres= post_data["nombres"],
+        apellidos=post_data["apellidos"],
+        numregistro=post_data["nregistro"],
+        profesiones_idprofesiones= Profesiones.objects.get(idprofesiones=post_data["profesiones"]),
         contrasena=pwhash,
-        fechanacimiento=request.POST["dateborn"],
+        fechanacimiento=post_data["dateborn"],
         created_at=datetime.now(),
         status=1
     )
