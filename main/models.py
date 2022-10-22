@@ -38,8 +38,6 @@ class Estado(models.Model):
     desc_estado = models.CharField(max_length=45, blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
 
-
-
 class Ficha(models.Model):
     nficha = models.AutoField(primary_key=True)
     profesionales_rut = models.ForeignKey('Profesionales', models.DO_NOTHING, db_column='profesionales_RUT')  # Field name made lowercase.

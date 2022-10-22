@@ -83,7 +83,7 @@ class ProfesionalesManager(models.Manager):
                     errors["exists"]= "El correo ya existe"
         # Valida la longitud de la contraseña
         if postData["password"] != '':
-            if len(postData["password"]) == 0 or len(postData["password"]) < 5:
+            if len(postData["password"]) < 5:
                 errors["passwordlen"]= "La contraseña debe tener al menos 5 caracteres"
             #Valida si las constraseñas coinciden
             elif postData["password"] != postData["cpassword"]:

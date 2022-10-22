@@ -56,7 +56,6 @@ def logged(request):
         if profesional['updated_at'] is not None:
             profesional['updated_at'] = profesional['updated_at'].strftime('%d/%m/%Y')
         pw=profesional["contrasena"]
-
         if not bcrypt.checkpw(request.POST['password'].encode(), pw.encode()):
             messages.error(request, 'Datos no validos')
         else:
@@ -105,13 +104,11 @@ def update(request):
             errorsarray.append(v)
         return JsonResponse({'errors':errorsarray}, status=500)
     profesional = Profesionales.objects.filter(rut=current_data['rut'])
-    
-    
     profesionaldict = model_to_dict(profesional[0])
-
-    if not bcrypt.checkpw(post_data['password'].encode(), profesionaldict['contrasena'].encode()):
+    if(post_data['password'] != ''):
         pwhash = bcrypt.hashpw(post_data["password"].encode(), bcrypt.gensalt()).decode()
-        
+    else:
+        pwhash=profesionaldict['contrasena']
     profesional.update(
         rut= post_data['rut'],
         nombres= post_data["nombres"],
@@ -124,4 +121,10 @@ def update(request):
         updated_at=datetime.now(),
         status=1
     )
+    profesional = model_to_dict(Profesionales.objects.get(rut=post_data['rut']))
+    profesional['fechanacimiento'] = profesional['fechanacimiento'].strftime('%d/%m/%Y')
+    profesional['created_at'] = profesional['created_at'].strftime('%d/%m/%Y')
+    if profesional['updated_at'] is not None:
+        profesional['updated_at'] = profesional['updated_at'].strftime('%d/%m/%Y')
+    request.session["profesional"]=profesional
     return JsonResponse({'status':'ok'},status=200)
