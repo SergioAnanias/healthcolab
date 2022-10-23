@@ -13,22 +13,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="/register">Register</a>
             </li>
-            {% endif %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Dropdown
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Something</a>
-                    <a class="dropdown-item" href="#">Anything</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/pacientes">Pacientes</a>
             </li>
-            
         </ul>
-        {% if request.session.profesional %}
         <ul class="navbar-nav ml-auto">
             <li class="nav-link ">
                 Hola, {{ usuario.nombres }} {{ usuario.apellidos }} (<a href="/edit">Editar Perfil</a>)

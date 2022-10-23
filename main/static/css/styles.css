@@ -1,0 +1,16 @@
+a {
+    color: inherit;
+}
+#motivoConsulta {
+    resize: none;
+}
+#plus{
+    transition: transform .2s; /* Animation */
+}
+#plus:hover{
+    transform: scale(1.2);
+}
+
+table.dataTable thead .sorting_asc{
+    height: 10px;
+}

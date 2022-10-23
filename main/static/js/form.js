@@ -49,9 +49,7 @@ function submitForm(form) {
         return Promise.reject(response);
       }
       window.location.href = '/home'
-      return response.json();
     })
-    .then((data) => console.log(data))
     .catch((ex) => {
       ex.json().then((errors) => {
         errors.errors.forEach((error) => {
@@ -102,3 +100,4 @@ function updateUser(form) {
       });
     });
 }
+

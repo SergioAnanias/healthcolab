@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Pacientes{% endblock %}
+
+{% block content %}
+<div class="row justify-content-end mt-2">
+    <h1 class="text-center col-11">Mis pacientes</h1>
+    <a class="mt-3" id="plus" href="/nuevopaciente"><i class="fa-2xl fa-solid fa-user-plus"></i></i>
+    </a>
+</div>
+<form>
+    {% csrf_token %}
+</form>
+<table id="pacientes">
+    <thead>
+        <td>RUT</td>
+        <td>Nombres</td>
+        <td>Apellidos</td>
+        <td>Dirección</td>
+        <td>Numero contacto</td>
+        <td>Profesionales a Cargo</td>
+        <td>Acciones</td>
+    </thead>
+    <tbody>
+        {% for paciente in pacientes %}
+        <tr>
+            <td>{{ paciente.rut }}</td>
+            <td>{{ paciente.nombre }}</td>
+            <td>{{ paciente.apellidos }}</td>
+            <td>{{ paciente.direccion }}</td>
+            <td>{{ paciente.telefono }}</td>
+            <td>
+                {% for profesional in paciente.profesionales %}
+                    <li>
+                        {{ profesional.profesionales_rut.nombres }} {{ profesional.profesionales_rut.apellidos }}
+                    </li>
+                {% endfor %}
+            </td>
+            <td>
+                <form id='{{ paciente.rut }}' action="DELETE">
+                    {% csrf_token %}
+                    <i class="fa-sharp fa-solid fa-circle-xmark" onclick="deletePaciente('{{ paciente.rut }}')"></i>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% load static %}
+<script src="{% static 'js/pacientes.js' %}"></script>
+{% endblock %}

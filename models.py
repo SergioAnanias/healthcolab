@@ -6,7 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from .validations import * 
+
 
 class Agenda(models.Model):
     pacientes_rut = models.ForeignKey('Pacientes', models.DO_NOTHING, db_column='pacientes_rut')
@@ -18,8 +18,22 @@ class Agenda(models.Model):
     estado_idestado = models.ForeignKey('Estado', models.DO_NOTHING, db_column='estado_idestado')
     status = models.IntegerField(blank=True, null=True)
 
-    
+    class Meta:
+        managed = False
+        db_table = 'agenda'
 
+
+class Comentarios(models.Model):
+    idcomentarios = models.IntegerField(primary_key=True)
+    comentarios = models.CharField(max_length=255, blank=True, null=True)
+    nficha = models.ForeignKey('Ficha', models.DO_NOTHING, db_column='nficha')
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    status = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'comentarios'
 
 
 class Estado(models.Model):
@@ -27,17 +41,22 @@ class Estado(models.Model):
     desc_estado = models.CharField(max_length=45, blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
 
+    class Meta:
+        managed = False
+        db_table = 'estado'
+
 
 class Ficha(models.Model):
     nficha = models.AutoField(primary_key=True)
     profesionales_rut = models.ForeignKey('Profesionales', models.DO_NOTHING, db_column='profesionales_RUT')  # Field name made lowercase.
     pacientes_rut = models.ForeignKey('Pacientes', models.DO_NOTHING, db_column='pacientes_rut')
-    motivoingreso = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
 
-    
+    class Meta:
+        managed = False
+        db_table = 'ficha'
 
 
 class Pacientes(models.Model):
@@ -47,28 +66,32 @@ class Pacientes(models.Model):
     fechanacimiento = models.DateField(blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     telefono = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField()
+    email = models.CharField(max_length=255, blank=True, null=True)
+    motivoingreso = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
-    objects = PacientesManager()
-    def profesionales(self):
-        return Ficha.objects.filter(pacientes_rut=self.rut)
+
+    class Meta:
+        managed = False
+        db_table = 'pacientes'
+
 
 class Profesionales(models.Model):
     rut = models.CharField(db_column='RUT', primary_key=True, max_length=10)  # Field name made lowercase.
     nombres = models.CharField(max_length=255, blank=True, null=True)
     apellidos = models.CharField(max_length=255, blank=True, null=True)
     numregistro = models.CharField(max_length=20, blank=True, null=True)
-    email = models.EmailField()
     profesiones_idprofesiones = models.ForeignKey('Profesiones', models.DO_NOTHING, db_column='profesiones_idprofesiones')
     contrasena = models.CharField(max_length=255, blank=True, null=True)
     fechanacimiento = models.DateField(blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
-    objects = ProfesionalesManager()
-    
+
+    class Meta:
+        managed = False
+        db_table = 'profesionales'
 
 
 class Profesiones(models.Model):
@@ -76,7 +99,9 @@ class Profesiones(models.Model):
     desc_profesion = models.CharField(max_length=45, blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
 
-    
+    class Meta:
+        managed = False
+        db_table = 'profesiones'
 
 
 class Registro(models.Model):
@@ -87,4 +112,6 @@ class Registro(models.Model):
     status = models.IntegerField()
     nficha = models.ForeignKey(Ficha, models.DO_NOTHING, db_column='nficha')
 
-    
+    class Meta:
+        managed = False
+        db_table = 'registro'

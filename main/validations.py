@@ -98,3 +98,36 @@ class ProfesionalesManager(models.Manager):
         elif len(postData)==0:
             errors["nregistro"] = "Debe ingresar un numero de registro"
         return errors
+
+
+class PacientesManager(models.Manager):
+    def validator(self, post_data):
+        errors={}
+        if len(post_data["rut"]) == 0:
+            errors["rut"] = "El campo rut se encuentra vacio"
+        elif len(post_data["rut"])>0:
+            #Valida el rut
+            RUT_REGEX=re.compile(r'^(\d{1,2})(\d{3})(\d{3})-(\w{1})$')
+            if not re.match(RUT_REGEX, post_data["rut"]):
+                errors["rut"]="RUT no valido"
+        if len(post_data["nombres"]) == 0:
+            errors["nombres"] = "El campo nombre se encuentra vacio"
+        if len(post_data["apellidos"]) == 0:
+            errors["apellidos"] = "El campo apellidos se encuentra vacio"
+        if len(post_data["email"])>0:
+            EMAIL_REGEX=re.compile(r'[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+')
+            # Valida si el email sigue una expresión regular
+            if not re.match(EMAIL_REGEX, post_data["email"]):
+                errors["email"]="Email no valido"
+            # Valida si el correo existe o no
+        #Valida si la fecha no esta nula, es una fecha valida, y ademas si es que la fecha esta en pasado
+        if len(post_data["dateborn"]) == 0 or len(post_data["dateborn"]) < 10 or datetime.strptime(post_data["dateborn"], "%Y-%m-%d") > datetime.now(): 
+            errors["age"] = "Debe ingresar una fecha de nacimiento valida"
+        if len(post_data["telefono"]) == 0:
+            errors["telefono"] = "El campo telefono se encuentra vacio"
+        if len(post_data["direccion"]) == 0:
+            errors["direccion"] = "El campo direccion se encuentra vacio"
+        if len(post_data["motivoConsulta"]) == 0:
+            errors["motivoConsulta"] = "El campo motivo de consulta se encuentra vacio"
+        print(post_data)
+        return errors
