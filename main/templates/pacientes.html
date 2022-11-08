@@ -39,6 +39,7 @@
                 <form id='{{ paciente.rut }}' action="DELETE">
                     {% csrf_token %}
                     <i class="fa-sharp fa-solid fa-circle-xmark" onclick="deletePaciente('{{ paciente.rut }}')"></i>
+                    <a href="edit_paciente/{{paciente.rut}}">Editar</a>
                 </form>
             </td>
         </tr>

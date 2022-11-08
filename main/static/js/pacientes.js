@@ -2,7 +2,7 @@ $(document).ready(function () {
   $("#pacientes").DataTable();
 });
 
-
+if (document.getElementById("register")) {
   document.getElementById("register").addEventListener(
     "submit",
     function (e) {
@@ -18,7 +18,18 @@ $(document).ready(function () {
     },
     true
   );
-
+}
+if (document.getElementById("update")) {
+  document.getElementById("update").addEventListener(
+    "submit",
+    function (e) {
+      let form = document.getElementById("update");
+      e.preventDefault();
+      updatePaciente(form);
+    },
+    true
+  );
+}
 
 function submitForm(form) {
   const post_data = {
@@ -77,7 +88,6 @@ function deletePaciente(rutPaciente) {
       if (!response.ok) {
         return Promise.reject(response);
       }
-      console.log(response);
       window.location.href = "/pacientes";
     })
     .catch((ex) => {
@@ -144,4 +154,44 @@ function getPaciente() {
         });
       });
     });
+}
+
+function updatePaciente(form) {
+  const post_data = {
+    'paciente': {
+      csrfmiddlewartetoken: form.csrfmiddlewaretoken.value,
+      rut: form.rut.value,
+      nombres: form.nombres.value,
+      apellidos: form.apellidos.value,
+      telefono: form.telefono.value,
+      direccion: form.direccion.value,
+      email: form.email.value,
+      dateborn: form.dateborn.value,
+      motivoConsulta: form.motivoConsulta.value,
+    },
+  };
+  fetch("/edit_paciente/"+ post_data.paciente.rut, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "X-CSRFToken": form.csrfmiddlewaretoken.value,
+      Accept: "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    body: JSON.stringify(post_data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return Promise.reject(response);
+      }
+      window.location.href = "/pacientes";
+    })
+    .catch((ex) => {
+      ex.json().then((errors) => {
+        errors.errors.forEach((error) => {
+          toastr.error(error);
+        });
+      });
+    });
+
 }

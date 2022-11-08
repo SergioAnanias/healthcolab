@@ -210,3 +210,91 @@ def paciente(request, rut=None):
                 return JsonResponse({'errors':['El paciente no ha sido encontrado']},status=500)
         except:
             return JsonResponse({'errors':['Ha habido un error']},status=400)
+
+def agenda(request):
+    fechaActual = date.today()
+    print(fechaActual)
+    usuario = request.session['profesional']
+    agendamientos = Agenda.objects.filter(profesionales_rut=usuario['rut'],fecha__gte=fechaActual)
+    estados = Estado.objects.all()
+    context ={
+        "usuario":usuario,
+        "agendamientos":agendamientos,
+        "estados":estados
+    }
+    return render(request, 'agenda.html', context)
+
+def profesional_has_paciente(request, rutPaciente = None, rutProfesional = None):
+    if request.method == 'GET':
+        try:
+            ficha = Ficha.objects.filter(pacientes_rut=rutPaciente, profesionales_rut=rutProfesional, status=1)
+            if len(ficha)>0:
+                paciente = Pacientes.objects.filter(rut=rutPaciente)
+                paciente = paciente.values()[0]
+                return JsonResponse({'paciente':paciente}, status= 200)
+            else:
+                return JsonResponse({'errors':['El paciente no se encuentra asignado al profesional, debe registrarlo en la pestaña pacientes antes de poder agendar']},status=500)
+        except:
+            return JsonResponse({'errors':['Ha habido un error']},status=400)
+
+
+def submit_agendamiento(request):
+    post_data = json.load(request)['agenda']
+    paciente = Pacientes.objects.get(rut=post_data['pacientes_rut'])
+    profesional=Profesionales.objects.get(rut=post_data['profesionales_rut'])
+    estado = Estado.objects.get(idestado=1)
+    agenda = Agenda.objects.create(
+        pacientes_rut=paciente,
+        profesionales_rut=profesional,
+        fecha=post_data['fecha'],
+        hora=post_data['hora'],
+        created_at=datetime.now(),
+        estado_idestado=estado,
+        status=1
+    )
+    return JsonResponse({'data':[post_data]},status=200)
+
+def update_agendamiento(request):
+    post_data = json.load(request)['agenda']
+    agendamiento = Agenda.objects.filter(id=post_data['idAgenda'])
+    fechaActual=datetime.now()
+    agendamiento.update(estado_idestado=post_data['idEstado'],updated_at=fechaActual)
+    return JsonResponse({'success':'estado cambiado'},status=200)
+
+def edit_paciente(request,rutPaciente):
+    profesional = Profesionales.objects.get(rut=request.session['profesional']['rut'])
+    if request.method=='POST':
+        post_data = json.load(request)['paciente']
+        errors = Pacientes.objects.validator(post_data)
+        if len(errors)>0:
+            errorsarray=[]
+            for k, v in errors.items():
+                errorsarray.append(v)
+            return JsonResponse({'errors':errorsarray}, status=500)
+        paciente = Pacientes.objects.filter(rut=post_data["rut"])
+        if len(paciente) == 0 :
+            return JsonResponse({'errors':['El rut del paciente no ha sido encontrado']},status=400)
+        else:
+            paciente = Pacientes.objects.update(
+                nombre= post_data["nombres"],
+                apellidos=post_data["apellidos"],
+                email=post_data["email"],
+                fechanacimiento=post_data['dateborn'],
+                direccion=post_data['direccion'],
+                telefono=post_data['telefono'],
+                updated_at=datetime.now(),
+                status=1
+            )
+        ficha = Ficha.objects.filter(profesionales_rut=profesional, pacientes_rut=paciente)
+        if len(ficha)>0:
+            ficha.update(motivoingreso=post_data['motivoConsulta'], status=1)
+            return JsonResponse({'status':'ok'},status=200)
+        return JsonResponse({'status':'ok'},status=200)
+    else:
+        motivoConsulta= Ficha.objects.filter(pacientes_rut=rutPaciente, profesionales_rut=request.session['profesional']['rut'])[0]
+        context = {
+            'paciente': Pacientes.objects.get(rut=rutPaciente),
+            'motivoconsulta': motivoConsulta.motivoingreso,
+            'usuario': profesional
+        }
+        return render(request, 'editarpaciente.html',context)

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Editar datos del paciente{% endblock %}
+
+{% block content %}
+
+<form class="offset-3 col-6" id="update" name="update" method="POST">
+    {% csrf_token %}
+    <div class="row mt-3 form-group">
+        <label for="rut" class="col-11">RUT Paciente</label>
+        <div class="row col-12">
+            <input type="text" class="form-control col-10 ml-3" id="rut"
+            placeholder="Ingrese el RUT del paciente sin puntos y con guión" value="{{paciente.rut}}" disabled name="rut">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="nombres">Nombre</label>
+        <input type="text" class="form-control" id="nombres" placeholder="Ingrese su nombre" value="{{paciente.nombre}}" name="nombres">
+    </div>
+    <div class="form-group">
+        <label for="apellidos">Apellidos</label>
+        <input type="text" class="form-control" id="apellidos" placeholder="Ingrese su apellidos" name="apellidos" value="{{paciente.apellidos}}">
+    </div>
+    <div class="form-group">
+        <label for="telefono">Numero de Telefono</label>
+        <input type="text" class="form-control" id="telefono" placeholder="Ingrese su telefono" name="telefono" value="{{paciente.telefono}}">
+    </div>
+    <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input type="text" class="form-control" id="direccion" placeholder="Ingrese su dirección" name="direccion" value="{{paciente.direccion}}">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Ingrese su correo" name="email" value="{{paciente.email}}">
+    </div>
+    <div class="form-group">
+        <label for="dateborn">Fecha de nacimiento</label>
+        <input type="date" class="form-control" id="dateborn" placeholder="Ingrese sus Apellidos" name="dateborn" value="{{paciente.fechanacimiento | date:'Y-m-d'}}">
+    </div>
+    <div class="form-group">
+        <label for="motivoConsulta">Motivo de consulta</label>
+        <textarea  class="form-control" id="motivoConsulta" rows="3" maxlength="255" >{{ motivoconsulta }}</textarea>
+    </div>
+    <div class="text-center form-group mt-5">
+        <button class="btn-secondary btn" name="submit" id="submit" type="submit">Submit</button>
+    </div>
+</form>
+{% load static %}
+<script src="{% static 'js/pacientes.js' %}"></script>
+
+{% endblock %}

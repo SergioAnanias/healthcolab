@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block titulo %}Agenda{% endblock %}
+
+{% block content %}
+
+
+<div class="d-flex justify-content-end mb-3">
+    <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#nuevoAgendamiento">
+        Agregar un nuevo agendamiento
+    </button>
+</div>
+
+<table id="agenda">
+    <thead>
+        <td>RUT</td>
+        <td>Nombres</td>
+        <td>Apellidos</td>
+        <td>Dirección</td>
+        <td>Numero contacto</td>
+        <td>Fecha</td>
+        <td>Hora</td>
+        <td>Estado</td>
+    </thead>
+    <tbody>
+        {% for agenda in agendamientos %}
+        <tr>
+            <td>{{agenda.pacientes_rut.rut}}</td>
+            <td>{{agenda.pacientes_rut.nombre}}</td>
+            <td>{{agenda.pacientes_rut.apellidos}}</td>
+            <td>{{agenda.pacientes_rut.direccion}}</td>
+            <td>{{agenda.pacientes_rut.telefono}}</td>
+            <td>{{agenda.fecha}}</td>
+            <td>{{agenda.hora}}</td>
+            <td>
+                <form id="{{agenda.id}}FORM">{% csrf_token %}                    
+                    <select id="{{ agenda.id }}ID" onChange="estadoSelected({{ agenda.id }});" class="form-control"
+                        id="estados" name="estados" {% if usuario %}
+                        selected="{{ usuario.profesiones_idprofesiones }}" {%endif%}>
+                        {% for estado in estados %}
+                        <option value="{{ estado.idestado}}" {% if estado.idestado == agenda.estado_idestado.idestado %} selected {% endif %}>{{estado.desc_estado}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{# modal #}
+<div class="modal fade" id="nuevoAgendamiento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registre un nuevo agendamiento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="nuevaAgenda" action="post">{% csrf_token %}
+                    <div class="row mt-3 form-group">
+                        <label for="rut" class="col-11">RUT Paciente</label>
+                        <div class="row col-12">
+                            <input onkeypress="disableForm();" type="text" class="form-control col-10 ml-3" id="rut"
+                                placeholder="Ingrese el RUT del paciente sin puntos y con guión" name="rut">
+                            <i class="fa-solid fa-xl mt-3 fa-magnifying-glass col-1"
+                                onclick="getPaciente('{{usuario.rut}}')"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombres">Nombre</label>
+                        <input type="text" class="form-control" id="nombres" placeholder="Ingrese su nombre"
+                            name="nombres" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos</label>
+                        <input type="text" class="form-control" id="apellidos" placeholder="Ingrese su apellidos"
+                            name="apellidos" disabled>
+                    </div>
+                    <div class="row mt-3 form-group">
+                        <label for="fecha" class="col-11">Fecha de la atención</label>
+                        <div class="row col-12">
+                            <input type="date" class="form-control col-10 ml-3" id="fecha"
+                                placeholder="Ingrese la fecha de la atención" name="fecha" disabled>
+                        </div>
+                    </div>
+                    <div class="row mt-3 form-group">
+                        <label for="hora" class="col-11">Hora de la atención</label>
+                        <div class="row col-12">
+                            <input type="time" class="form-control col-10 ml-3" id="hora"
+                                placeholder="Ingrese la hora de la atención" name="hora" disabled>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn-secondary btn" id="submit"
+                            onclick="submitAgendamiento('{{usuario.rut}}<')" disabled>Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% load static %}
+<script src="{% static 'js/agenda.js' %}"></script>
+{% endblock %}
