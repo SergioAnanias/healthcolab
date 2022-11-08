@@ -18,5 +18,6 @@ urlpatterns = [
     path('agenda', views.agenda),
     path('submit_agendamiento', views.submit_agendamiento),
     path('update_agendamiento', views.update_agendamiento),
-    path('edit_paciente/<str:rutPaciente>',views.edit_paciente)
+    path('edit_paciente/<str:rutPaciente>',views.edit_paciente),
+    path('historico/',views.historico),
 ]

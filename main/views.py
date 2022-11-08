@@ -224,6 +224,14 @@ def agenda(request):
     }
     return render(request, 'agenda.html', context)
 
+def historico(request):
+    usuario = request.session['profesional']
+    agendamientos = Agenda.objects.filter(profesionales_rut=usuario['rut'])
+    context = {
+        'historico':agendamientos
+    }
+    return render(request, 'historico.html', context)
+
 def profesional_has_paciente(request, rutPaciente = None, rutProfesional = None):
     if request.method == 'GET':
         try:
@@ -253,6 +261,7 @@ def submit_agendamiento(request):
         status=1
     )
     return JsonResponse({'data':[post_data]},status=200)
+    
 
 def update_agendamiento(request):
     post_data = json.load(request)['agenda']

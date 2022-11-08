@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block titulo %}Agenda{% endblock %}
+
+{% block content %}
+
+
+
+
+<table id="agenda">
+    <thead>
+        <td>RUT</td>
+        <td>Nombres</td>
+        <td>Apellidos</td>
+        <td>Dirección</td>
+        <td>Numero contacto</td>
+        <td>Fecha</td>
+        <td>Hora</td>
+        <td>Estado</td>
+    </thead>
+    <tbody>
+        {% for agenda in historico %}
+        <tr>
+            <td>{{agenda.pacientes_rut.rut}}</td>
+            <td>{{agenda.pacientes_rut.nombre}}</td>
+            <td>{{agenda.pacientes_rut.apellidos}}</td>
+            <td>{{agenda.pacientes_rut.direccion}}</td>
+            <td>{{agenda.pacientes_rut.telefono}}</td>
+            <td>{{agenda.fecha}}</td>
+            <td>{{agenda.hora}}</td>
+            <td>
+                {{  agenda.estado_idestado.desc_estado }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% load static %}
+<script src="{% static 'js/agenda.js' %}"></script>
+{% endblock %}
