@@ -38,7 +38,6 @@ function getPaciente(rutProfesional) {
         document.getElementById("submit").className = "btn btn-primary";
         form.submit.disabled = false;
       }
-      console.log(response.status);
     })
     .catch((ex) => {
       ex.json().then((errors) => {
@@ -81,8 +80,7 @@ function submitAgendamiento(rutProfesional) {
       if (!response.ok) {
         return Promise.reject(response);
       }
-      $("#nuevoAgendamiento").modal("toggle");
-      toastr.success('Se ha agendado exitosamente')
+      window.location.href = "/agenda";
     })
     .catch((ex) => {
       ex.json().then((errors) => {

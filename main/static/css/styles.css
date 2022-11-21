@@ -1,7 +1,7 @@
 a {
     color: inherit;
 }
-#motivoConsulta {
+textarea {
     resize: none;
 }
 #plus{
@@ -13,4 +13,12 @@ a {
 
 table.dataTable thead .sorting_asc{
     height: 10px;
+}
+
+
+.registro{
+    background-color: lightgray;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
 }

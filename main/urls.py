@@ -20,4 +20,5 @@ urlpatterns = [
     path('update_agendamiento', views.update_agendamiento),
     path('edit_paciente/<str:rutPaciente>',views.edit_paciente),
     path('historico/',views.historico),
+    path('ficha/<str:rutPaciente>',views.ficha_paciente)
 ]

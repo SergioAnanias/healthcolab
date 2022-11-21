@@ -131,3 +131,11 @@ class PacientesManager(models.Manager):
             errors["motivoConsulta"] = "El campo motivo de consulta se encuentra vacio"
         print(post_data)
         return errors
+
+
+class AgendaManager(models.Manager):
+    def validator(self,post_data):
+        errors={}
+        if datetime.strptime(post_data['fecha']+" "+ post_data['hora'], "%Y-%m-%d %H:%M") < datetime.now():
+            errors['fechainvalida']="La fecha ingresada no es valida"
+        return errors

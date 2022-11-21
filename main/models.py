@@ -17,7 +17,7 @@ class Agenda(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
     estado_idestado = models.ForeignKey('Estado', models.DO_NOTHING, db_column='estado_idestado')
     status = models.IntegerField(blank=True, null=True)
-
+    objects = AgendaManager()
     
 
 
@@ -36,7 +36,8 @@ class Ficha(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
-
+    def registros(self):
+        return Registro.objects.filter(nficha=self.nficha)
     
 
 
@@ -72,7 +73,7 @@ class Profesionales(models.Model):
 
 
 class Profesiones(models.Model):
-    idprofesiones = models.IntegerField(primary_key=True)
+    idprofesiones = models.AutoField(primary_key=True)
     desc_profesion = models.CharField(max_length=45, blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
 
@@ -80,11 +81,9 @@ class Profesiones(models.Model):
 
 
 class Registro(models.Model):
-    idregistro = models.IntegerField(primary_key=True)
+    idregistro = models.AutoField(primary_key=True)
     registro = models.TextField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)
     status = models.IntegerField()
     nficha = models.ForeignKey(Ficha, models.DO_NOTHING, db_column='nficha')
-
-    

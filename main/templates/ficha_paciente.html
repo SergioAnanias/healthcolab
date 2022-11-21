@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block titulo %}Ficha paciente{% endblock %}
+
+{% block content %}
+
+<h1 class="mt-3 text-center">{{paciente.nombre}} {{paciente.apellidos}}</h1>
+<div class="row">
+    <div class="col-6">
+        <h3>Datos paciente:</h3>
+        <table>
+            <tbody>
+                <tr>
+                    <td>RUT</td>
+                    <td>: {{paciente.rut}}</td>
+                </tr>
+                <tr>
+                    <td>Fecha de Nacimiento</td>
+                    <td>: {{paciente.fechanacimiento | date:'d-m-Y'}}</td>
+                </tr>
+                <tr>
+                    <td>Dirección</td>
+                    <td>: {{paciente.direccion}}</td>
+                </tr>
+                <tr>
+                    <td>Telefono</td>
+                    <td>: {{paciente.telefono}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>: {{paciente.email}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-6">
+        <h3>Profesionales a Cargo:</h3>
+        {% for profesional in paciente.profesionales %}
+        <li><b>{{profesional.profesionales_rut.profesiones_idprofesiones.desc_profesion}}</b>:
+            {{profesional.profesionales_rut.nombres}} {{profesional.profesionales_rut.apellidos}}
+        </li>
+        {% endfor %}
+    </div>
+</div>
+
+
+<nav class="mt-3">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        {% for ficha in fichas %}
+        <a class="nav-item nav-link {% if ficha.profesionales_rut.rut == usuario.rut%} active{%endif%}" id="nav-{{ficha.nficha}}-tab"
+            data-toggle="tab" href="#nav-{{ficha.nficha}}" role="tab" aria-controls="nav-{{ficha.nficha}}"
+            aria-selected="{% if ficha.profesionales_rut.rut == usuario.rut %}true{% else %}false{%endif%}">{{ficha.profesionales_rut.profesiones_idprofesiones.desc_profesion}}</a>
+        {%endfor %}
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    {%for ficha in fichas%}
+    <div class="tab-pane fade col-10 ml-3 mt-3 {% if ficha.profesionales_rut.rut == usuario.rut %}show active{%endif%}" id="nav-{{ficha.nficha}}"
+        role="tabpanel" aria-labelledby="nav-{{ficha.nficha}}-tab">
+        {% for registro in ficha.registros %}
+        <div class="registro">
+            {{ registro.created_at}}
+            <p>
+                {{ registro.registro |linebreaks }}
+            </p>
+        </div>
+        {%endfor %}
+
+
+        {% if ficha.profesionales_rut.rut == usuario.rut%}
+        <form class="col-8 offset-2" method="POST" id="formRegister">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="hidden" name="nficha" value="{{ficha.nficha}}">
+                <label for="registro">
+                    <h4>Registro</h4>
+                </label>
+                <textarea name="registro" class="form-control" id="registro{{ficha.nficha}}" rows="7"
+                    maxlength="255"></textarea>
+            </div>
+            <div class="text-center form-group mt-5">
+                <button class="btn-primary btn" name="submit" id="submit" type="submit">Submit</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+{% load static %}
+<script src="{% static 'js/ficha_paciente.js' %}"></script>
+{% endblock %}
