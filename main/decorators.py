@@ -8,7 +8,7 @@ def loginauth(func):
 
 
 def loginauthPaciente(func):
-    def wrapper(request,rutPaciente):
+    def wrapper(request,rutPaciente=None):
         if not 'profesional' in request.session or not request.session['profesional']:
             return redirect("/")
         return func(request,rutPaciente)
@@ -16,7 +16,7 @@ def loginauthPaciente(func):
 
 
 def loginauthAll(func):
-    def wrapper(request,rutPaciente,rutProfesional):
+    def wrapper(request,rutPaciente=None,rutProfesional=None):
         if not 'profesional' in request.session or not request.session['profesional']:
             return redirect("/")
         return func(request,rutPaciente,rutProfesional)
