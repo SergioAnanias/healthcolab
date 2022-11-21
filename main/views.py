@@ -239,7 +239,8 @@ def historico(request):
     usuario = request.session['profesional']
     agendamientos = Agenda.objects.filter(profesionales_rut=usuario['rut'])
     context = {
-        'historico':agendamientos
+        'historico':agendamientos,
+        'usuario':usuario
     }
     return render(request, 'historico.html', context)
 
