@@ -8,6 +8,7 @@ from django.forms.models import model_to_dict
 from .decorators import *
 from django.http import JsonResponse
 from datetime import datetime, timedelta
+from dateutil.relativedelta import *
 
 def index(request):
     if not 'profesional' in request.session or not request.session['profesional']:
@@ -75,13 +76,54 @@ def home(request):
     end = start + timedelta(days=6)
     agendamientos = Agenda.objects.filter(profesionales_rut=usuario['rut'],fecha__gte=start, fecha__lte=end)
     estados = Estado.objects.all()
-    
+    months = [dt-relativedelta(months=+3), dt-relativedelta(months=+2),dt-relativedelta(months=+1), dt]
+
+    agendados=[]
+    confirmados=[]
+    realizados=[]
+    cancelados=[]
+    for month in months:
+        agendado= Agenda.objects.filter(
+            profesionales_rut=usuario['rut'],
+            fecha__gte=month.replace(day=1), 
+            fecha__lt= (month - relativedelta(months=-1)).replace(day=1), 
+            estado_idestado=Estado.objects.get(idestado=1),status=1
+            ).count()
+        cancelado= Agenda.objects.filter(
+            profesionales_rut=usuario['rut'],
+            fecha__gte=month.replace(day=1), 
+            fecha__lt= (month - relativedelta(months=-1)).replace(day=1), 
+            estado_idestado=Estado.objects.get(idestado=2),status=1
+            ).count()
+        confirmado= Agenda.objects.filter(
+            profesionales_rut=usuario['rut'],
+            fecha__gte=month.replace(day=1), 
+            fecha__lt= (month - relativedelta(months=-1)).replace(day=1), 
+            estado_idestado=Estado.objects.get(idestado=3),status=1
+            ).count()
+        realizado= Agenda.objects.filter(
+            profesionales_rut=usuario['rut'],
+            fecha__gte=month.replace(day=1), 
+            fecha__lt= (month - relativedelta(months=-1)).replace(day=1), 
+            estado_idestado=Estado.objects.get(idestado=4),status=1
+            ).count()
+        cancelados.append(cancelado)
+        confirmados.append(confirmado)
+        agendados.append(agendado)
+        realizados.append(realizado)
     data = {
         'usuario':request.session['profesional'],
         'agendamientos':agendamientos,
         'lunes':start,
         'domingo':end,
-        'estados':estados
+        'estados':estados,
+        'dt':dt,
+        'months':months,
+        'agendados':agendados,
+        'confirmados':confirmados,
+        'agendados':agendados,
+        'realizados':realizados,
+        'cancelados':cancelados
     }
     return render(request,'index.html',data)
 

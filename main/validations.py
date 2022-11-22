@@ -132,7 +132,6 @@ class PacientesManager(models.Manager):
         print(post_data)
         return errors
 
-
 class AgendaManager(models.Manager):
     def validator(self,post_data):
         errors={}
