@@ -31,8 +31,8 @@
             <td>{{agenda.pacientes_rut.apellidos}}</td>
             <td>{{agenda.pacientes_rut.direccion}}</td>
             <td>{{agenda.pacientes_rut.telefono}}</td>
-            <td>{{agenda.fecha}}</td>
-            <td>{{agenda.hora}}</td>
+            <td>{{agenda.fecha | date:'d-m-Y'}}</td>
+            <td>{{agenda.hora | time:'H:i'}}</td>
             <td>
                 {{agenda.estado_idestado.desc_estado}}
             </td>
