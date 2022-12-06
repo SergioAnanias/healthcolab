@@ -58,6 +58,8 @@
 
     <div class="tab-pane fade col-10 ml-3 mt-3 {% if ficha.profesionales_rut.rut == usuario.rut %}show active{%endif%}"
         id="nav-{{ficha.nficha}}" role="tabpanel" aria-labelledby="nav-{{ficha.nficha}}-tab">
+        <h4>Motivo de Consulta</h4>
+        <p>{{ficha.motivoingreso}}</p>
         {% for registro in ficha.registros %}
         {% if registro.status == 1 %}
         <div class="registro">
