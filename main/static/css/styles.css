@@ -1,24 +1,106 @@
-a {
-    color: inherit;
+/* uso general */
+:root{
+    --background: #4ac2dd8e;
+    /* --icons:#065915; */
+    /* --icons-hover:#6bc37b; */
+    --letter: rgb(3, 74, 59);
+    --icons: #17a2b8;
+    --icons-hover:#1762b8;
+}
+body{
+    font-family:trebuchet ms, sans-serif;
+}
+a{
+    text-decoration: none !important;
 }
 textarea {
     resize: none;
 }
-#plus{
-    transition: transform .2s; /* Animation */
+/* Barra navegación */
+#logo{
+    width: 80px;
 }
-#plus:hover{
-    transform: scale(1.2);
+#navbar-items{
+    margin: auto;
 }
+#navbar-items-logged{
+    margin-left: auto;
+    margin-right: -9rem;
+}
+nav.navbar{
+    background-color: var(--background);
+}
+li.nav-item>a.nav-link{
+    margin: 10px;
+    color: var(--letter);
+    font-weight: 500;
+    transition: .2s;
+}
+li.nav-item>a.nav-link:hover{
+    background-color: #ffffffc3 ;
+    border-radius: 10%;
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+.selected{
+    background-color:rgb(255, 255, 255);
+    border-radius: 10%;
+    transform: scale(1.1);
+}
+.nav-link.selected{
+    color: rgb(46, 172, 145) !important;
+}
+/* icons */
+a.fa-circle-xmark.fa-solid,#logout{
+    color:rgba(185, 34, 34, 0.819);
+}
+a.fa-circle-xmark.fa-solid,#logout:hover{
+    color:rgb(243, 7, 7);
+}
+a.fa-solid {
+    color: var(--icons);
+    transition: .2s;
+}
+a.fa-solid:hover{
+    color: var(--icons-hover);
+    transform: scale(1.4);
+}
+
+#edit{
+    color: black;
+    margin: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+
 
 table.dataTable thead .sorting_asc{
     height: 10px;
 }
 
-
 .registro{
-    background-color: lightgray;
+    background-color: var(--background);
     padding: 10px;
     border-radius: 10px;
     margin: 10px;
+}
+
+a.nav-item.nav-link{
+    background-color: var(--icons);
+    color: var(--letter);
+}
+
+a.nav-item.nav-link.active{
+    background-color: var(--background);
+    color: black;
+}
+#formRegister{
+    background-color: var(--background);
+    padding: 10px;
+    border-radius: 4%;
+}
+#registro{
+    display: block;
 }

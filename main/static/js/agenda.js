@@ -2,12 +2,11 @@ $(document).ready(function () {
   $("#agenda").DataTable();
 });
 
-function getPaciente(rutProfesional) {
-  console.log(rutProfesional);
+function pacienteSelected() {
+
   let form = document.getElementById("nuevaAgenda");
   let rutPaciente = form.rut.value;
-
-  fetch("/profesional_has_paciente/" + rutPaciente + "/" + rutProfesional, {
+  fetch("/paciente/" + rutPaciente, {
     method: "GET",
     credentials: "same-origin",
     headers: {
@@ -17,7 +16,8 @@ function getPaciente(rutProfesional) {
     },
   })
     .then((response) => {
-      if (response.status == 400) {
+      console.log(response)
+      if (response.status == 400 || response.status ==500) {
         return Promise.reject(response);
       }
       if (response.status == 200)
@@ -94,7 +94,7 @@ function submitAgendamiento(rutProfesional) {
 function estadoSelected(idAgenda) {
   const idEstado = document.getElementById(idAgenda + "ID").value;
   document.getElementById(idAgenda + "ID").disabled = true;
-  let form = document.getElementById(idAgenda + "FORM");
+  const form = document.getElementById(idAgenda + "FORM");
   const post_data = {
     agenda: {
       idAgenda:idAgenda,

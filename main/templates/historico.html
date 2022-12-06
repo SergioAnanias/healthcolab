@@ -3,7 +3,7 @@
 
 {% block content %}
 
-
+<h1 class="text-center">Historico de Atención</h1>
 
 
 <table id="agenda">
@@ -18,7 +18,7 @@
         <td>Estado</td>
     </thead>
     <tbody>
-        {% for agenda in historico %}
+        {% for agenda in agendamientos %}
         <tr>
             <td>{{agenda.pacientes_rut.rut}}</td>
             <td>{{agenda.pacientes_rut.nombre}}</td>
@@ -28,7 +28,14 @@
             <td>{{agenda.fecha}}</td>
             <td>{{agenda.hora}}</td>
             <td>
-                {{  agenda.estado_idestado.desc_estado }}
+                <form id="{{agenda.id}}FORM">{% csrf_token %}                    
+                    <select id="{{ agenda.id }}ID" onChange="estadoSelected({{ agenda.id }});" class="form-control"
+                        id="estados" name="estados">
+                        {% for estado in estados %}
+                        <option value="{{ estado.idestado}}" {% if estado.idestado == agenda.estado_idestado.idestado %} selected {% endif %}>{{estado.desc_estado}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
             </td>
         </tr>
         {% endfor %}

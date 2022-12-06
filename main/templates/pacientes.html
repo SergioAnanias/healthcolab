@@ -2,10 +2,11 @@
 {% block titulo %}Pacientes{% endblock %}
 
 {% block content %}
-<div class="row justify-content-end mt-2">
-    <h1 class="text-center col-11">Mis pacientes</h1>
-    <a class="mt-3" id="plus" href="/nuevopaciente"><i class="fa-2xl fa-solid fa-user-plus"></i></i>
+<div class="row mt-2">
+    <a class="mt-4 ml-3 fa-2xl fa-solid fa-user-plus" id="plus" href="/nuevopaciente">
     </a>
+    <h1 class="text-center col-11">Mis pacientes</h1>
+
 </div>
 <form>
     {% csrf_token %}
@@ -38,9 +39,9 @@
             <td>
                 <form id='{{ paciente.rut }}' action="DELETE">
                     {% csrf_token %}
-                    <i class="fa-sharp fa-solid fa-circle-xmark" onclick="deletePaciente('{{ paciente.rut }}')"></i>
-                    <a href="edit_paciente/{{paciente.rut}}">Editar</a>
-                    <a href="ficha/{{paciente.rut}}">Ver</a>
+                    <a class="fa-solid fa-pen-to-square fa-xl" href="edit_paciente/{{paciente.rut}}"></a>
+                    <a class="fa-solid fa-eye fa-xl" href="ficha/{{paciente.rut}}"></a>
+                    <a class="fa-sharp fa-solid fa-circle-xmark fa-xl" href="#" onclick="deletePaciente('{{ paciente.rut }}')"></a>
                 </form>
             </td>
         </tr>

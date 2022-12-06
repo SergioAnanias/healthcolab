@@ -2,12 +2,13 @@
 {% block titulo %}Agenda{% endblock %}
 
 {% block content %}
+<div class="row">
 
-
-<div class="d-flex justify-content-end mb-3">
-    <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#nuevoAgendamiento">
-        Agregar un nuevo agendamiento
-    </button>
+    <div class="d-flex justify-content-end ml-3 mb-3">
+        <a class="mt-4 mb-3 fa-solid fa-calendar-plus fa-2xl" href="#" data-toggle="modal" data-target="#nuevoAgendamiento">
+        </a>
+    </div>
+    <h1 class="text-center col-11">Mi agenda</h1>
 </div>
 
 <table id="agenda">
@@ -90,15 +91,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="nuevaAgenda" action="post">{% csrf_token %}
-                    <div class="row mt-3 form-group">
-                        <label for="rut" class="col-11">RUT Paciente</label>
-                        <div class="row col-12">
-                            <input onkeypress="disableForm();" type="text" class="form-control col-10 ml-3" id="rut"
-                                placeholder="Ingrese el RUT del paciente sin puntos y con guión" name="rut">
-                            <i class="fa-solid fa-xl mt-3 fa-magnifying-glass col-1"
-                                onclick="getPaciente('{{usuario.rut}}')"></i>
-                        </div>
+                <form id="nuevaAgenda" action="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="paciente" class="col-11">Paciente</label>
+                        <select onChange="pacienteSelected();" class="form-control" id="pacientes" name="rut">
+                        <option selected>Seleccione un paciente</option>
+                        {% for paciente in pacientes %}
+                        <option value="{{paciente.rut}}">{{paciente.nombre}} {{paciente.apellidos}}</option>
+                        {% endfor %}
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="nombres">Nombre</label>

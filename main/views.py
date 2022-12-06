@@ -12,12 +12,16 @@ from dateutil.relativedelta import *
 
 def index(request):
     if not 'profesional' in request.session or not request.session['profesional']:
-        return render(request, 'login.html')
+        context={
+            'login_view':True
+        }
+        return render(request, 'login.html',context)
     return redirect("/home")
 
 def registerForm(request):
     context ={
-        "profesiones":Profesiones.objects.all()
+        "profesiones":Profesiones.objects.all(),
+        "register_view":True
     }
     if not 'profesional' in request.session or not request.session['profesional']:
         return render(request, 'register.html',context)
@@ -123,7 +127,8 @@ def home(request):
         'confirmados':confirmados,
         'agendados':agendados,
         'realizados':realizados,
-        'cancelados':cancelados
+        'cancelados':cancelados,
+        'home_view':True
     }
     return render(request,'index.html',data)
 
@@ -188,7 +193,8 @@ def pacientes(request):
     pacientes = Pacientes.objects.filter(ficha__profesionales_rut=Profesionales.objects.get(rut=profesional.rut),ficha__status=1)
     context ={
         "usuario":usuario,
-        "pacientes":pacientes
+        "pacientes":pacientes,
+        "paciente_view":True
     }
     return render(request, 'pacientes.html', context)
 
@@ -199,7 +205,8 @@ def pacientes(request):
 def nuevopaciente(request):
     usuario = request.session['profesional']
     context ={
-        "usuario":usuario
+        "usuario":usuario,
+        "paciente_view":True
     }
     return render(request, 'nuevopaciente.html', context)
 
@@ -254,6 +261,7 @@ def paciente(request, rut=None):
         except:
             return JsonResponse({'errors':['Ha habido un error']},status=400)
     if request.method == 'GET':
+        print(rut)
         try:
             paciente = Pacientes.objects.filter(rut=rut)
 
@@ -268,21 +276,29 @@ def paciente(request, rut=None):
 def agenda(request):
     fechaActual = date.today()
     usuario = request.session['profesional']
-    agendamientos = Agenda.objects.filter(profesionales_rut=usuario['rut'],fecha__gte=fechaActual)
+    print(usuario)
+    agendamientos = Agenda.objects.filter(profesionales_rut=usuario['rut'],fecha__gte=fechaActual,status=1)
     estados = Estado.objects.all()
+    pacientes = Pacientes.objects.filter(ficha__profesionales_rut=Profesionales.objects.get(rut=usuario['rut']),ficha__status=1)
     context ={
         "usuario":usuario,
         "agendamientos":agendamientos,
-        "estados":estados
+        "estados":estados,
+        "pacientes":pacientes,
+        "agenda_view":True
     }
     return render(request, 'agenda.html', context)
+    
 @loginauth
 def historico(request):
     usuario = request.session['profesional']
-    agendamientos = Agenda.objects.filter(profesionales_rut=usuario['rut'])
+    agendamientos = Agenda.objects.filter(profesionales_rut=usuario['rut'],status=1)
+    estados = Estado.objects.all()
     context = {
-        'historico':agendamientos,
-        'usuario':usuario
+        'usuario':usuario,
+        'agendamientos':agendamientos,
+        'estados':estados,
+        'historico_view':True
     }
     return render(request, 'historico.html', context)
 
@@ -366,7 +382,8 @@ def edit_paciente(request,rutPaciente):
         context = {
             'paciente': Pacientes.objects.get(rut=rutPaciente),
             'motivoconsulta': motivoConsulta.motivoingreso,
-            'usuario': profesional
+            'usuario': profesional,
+            'paciente_view':True
         }
         return render(request, 'editarpaciente.html',context)
 
@@ -374,7 +391,6 @@ def edit_paciente(request,rutPaciente):
 def ficha_paciente(request,rutPaciente):
     if request.method=='POST':
         post_data = json.load(request)
-        print(post_data)
         nuevo_registro = Registro.objects.create(
             registro=post_data['registro'],
             status=1,
@@ -387,8 +403,19 @@ def ficha_paciente(request,rutPaciente):
     context ={
         'fichas':fichas,
         'paciente':paciente,
-        'usuario':profesional
+        'usuario':profesional,
+        'paciente_view':True
     }
     if request.method=='GET':
         return render(request, 'ficha_paciente.html',context)
+    if request.method =='PUT':
+        post_data=json.load(request)
+        registro = Registro.objects.filter(idregistro=post_data['id_registro'])
+        registro.update(registro=post_data['registro'])
+        return JsonResponse({'status':'ok'},status=200)
+    if request.method=='DELETE':
+        post_data=json.load(request)
+        registro = Registro.objects.filter(idregistro=post_data['id_registro'])
+        registro.update(status=0)
+        return JsonResponse({'status':'ok'},status=200)
 

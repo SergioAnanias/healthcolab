@@ -12,13 +12,13 @@ urlpatterns = [
     path('update', views.update),
     path('pacientes', views.pacientes),
     path('nuevopaciente', views.nuevopaciente),
-    path('paciente/<str:rut>', views.paciente),
     path('profesional_has_paciente/<str:rutPaciente>/<str:rutProfesional>', views.profesional_has_paciente),
     path('paciente', views.paciente),
+    path('paciente/<str:rut>', views.paciente),
     path('agenda', views.agenda),
     path('submit_agendamiento', views.submit_agendamiento),
     path('update_agendamiento', views.update_agendamiento),
-    path('edit_paciente/<str:rutPaciente>',views.edit_paciente),
+    path('edit_paciente/<str:rut>',views.edit_paciente),
     path('historico/',views.historico),
-    path('ficha/<str:rutPaciente>',views.ficha_paciente)
+    path('ficha/<str:rut>',views.ficha_paciente)
 ]

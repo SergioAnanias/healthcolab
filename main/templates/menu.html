@@ -1,36 +1,45 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/home">HealthColab</a>
+<nav class="navbar navbar-expand-lg">
+    {% load static %}
+    <img class="navbar-brand" id="logo" src="{% static 'images/logo.png' %}"></img>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            {% if not request.session.profesional %}
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Login<span class="sr-only">(current)</span></a>
+        {% if not request.session.profesional %}
+        <ul id="navbar-items" class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link {% if login_view %} selected {% endif %}" href="/">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/register">Register</a>
+                <a class="nav-link {% if register_view %} selected {% endif %}" href="/register">Register</a>
             </li>
-            {% else %}
+        </ul>
+        <div></div>
+        {% endif %}
+        {% if request.session.profesional %}
+        <ul class="navbar-nav" id="navbar-items-logged">
             <li class="nav-item">
-                <a class="nav-link" href="/pacientes">Pacientes</a>
+                <a class="nav-link {% if home_view %}selected {% endif %}" href="/home">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/agenda">Agenda</a>
+                <a class="nav-link {% if paciente_view %}selected {% endif %}" href="/pacientes">Pacientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  {% if agenda_view %} selected {% endif %}" href="/agenda">Agenda</a>
             </li>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/historico">Historico</a>
+                <a class="nav-link {% if historico_view %}selected {%endif%}" href="/historico">Historico</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-link ">
-                Hola, {{ usuario.nombres }} {{ usuario.apellidos }} (<a href="/edit">Editar Perfil</a>)
+                Hola, {{ usuario.nombres }} {{ usuario.apellidos }} 
             </li>
             <form class="form-inline my-2 my-lg-0">
-                <a href="/logout" class="btn btn-danger">Logout</a>
+                <a href="/edit" id="edit" class="fa-solid fa-pen-to-square fa-xl"></a>
+                <a href="/logout" id="logout" class="fa-solid fa-right-from-bracket fa-xl"></a>
             </form>
         </ul>
         {% endif %}
