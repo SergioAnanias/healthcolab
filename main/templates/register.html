@@ -51,7 +51,7 @@
             
         </div>
         <div class="form-group">
-            <label for="profesiones">Profesiones</label>
+            <label for="profesiones">Profesión</label>
             <select class="form-control" id="profesiones" name="profesiones" {% if usuario %}  selected="{{ usuario.profesiones_idprofesiones }}" {%endif%}>
                 {% for profesion in profesiones %}
                 <option value="{{ profesion.idprofesiones}}" {% if usuario and profesion.idprofesiones == usuario.profesiones_idprofesiones %} selected {% endif %}>{{profesion.desc_profesion}}</option>
