@@ -43,41 +43,63 @@
 <div id="chartDiv" style="max-width: 740px;height: 400px;margin: 0px auto">
 </div>
 
-
+{% load index %}
 
 {% load static %}
 <script src="{% static 'js/index.js' %}">
 </script>
 <script>
     var chart = JSC.chart('chartDiv', {
-        debug: true,
+        debug: false,
         type: 'column',
+        annotations:[],
         yAxis: {
             scale_type: 'stacked',
-            label_text: 'Agenda'
+            label_text: 'Agendamientos'
         },
         title_label_text: 'Mes N°{{dt | date:'m'}} del {{dt|date:'Y'}}',
-        xAxis: {
-            label_text: 'Ultimos 4 meses',
-            categories: [{% for month in months %} '{{month | date:'m'}}', {%endfor%}]
-        },
+        xAxis_label_text:'Ultimos 4 meses',
         series: [
             {
                 name: 'Agendados',
-                points: [{% for agendado in agendados %} {{agendado}}{% if forloop.last != true %}, {% endif %} {%endfor%}]
-            },
-            {
-                name: 'Confirmado',
-                points: [{% for confirmado in confirmados %} {{confirmado}}{% if forloop.last != true %}, {% endif %}  {%endfor%}]
-            },
-            {
-                name: 'Realizados',
-                points: [{% for realizado in realizados %} {{realizado}} {% if forloop.last != true %}, {% endif %} {%endfor%}]
+                points:[
+                            {% for month in months %} 
+                                [
+                                '{{ month | date:'M'}}', {{ agendados|index:forloop.counter0}}
+                                ],
+                            {%endfor%}
+                        ],
             },
             {
                 name: 'Cancelados',
-                points: [{% for cancelado in cancelados %} {{cancelado}} {% if forloop.last != true %}, {% endif %}  {%endfor%}]
-            }
+                points:[
+                            {% for month in months %} 
+                                [
+                                '{{ month | date:'M'}}', {{ cancelados|index:forloop.counter0}}
+                                ],
+                            {%endfor%}
+                        ],
+            },
+            {
+                name: 'Realizados',
+                points:[
+                            {% for month in months %} 
+                                [
+                                '{{ month | date:'M'}}', {{ realizados|index:forloop.counter0}}
+                                ],
+                            {%endfor%}
+                        ],
+            },
+            {
+                name: 'Confirmados',
+                points:[
+                            {% for month in months %} 
+                                [
+                                '{{ month | date:'M'}}', {{ confirmados|index:forloop.counter0}}
+                                ],
+                            {%endfor%}
+                        ],
+            }            
         ]
     });
 </script>
