@@ -64,19 +64,19 @@
         series: [
             {
                 name: 'Agendados',
-                points: [{% for agendado in agendados %} {{agendado}}, {%endfor%}]
+                points: [{% for agendado in agendados %} {{agendado}}{% if forloop.last != true %}, {% endif %} {%endfor%}]
             },
             {
                 name: 'Confirmado',
-                points: [{% for confirmado in confirmados %} {{confirmado}}, {%endfor%}]
+                points: [{% for confirmado in confirmados %} {{confirmado}}{% if forloop.last != true %}, {% endif %}  {%endfor%}]
             },
             {
                 name: 'Realizados',
-                points: [{% for realizado in realizados %} {{realizado}}, {%endfor%}]
+                points: [{% for realizado in realizados %} {{realizado}} {% if forloop.last != true %}, {% endif %} {%endfor%}]
             },
             {
                 name: 'Cancelados',
-                points: [{% for cancelado in cancelados %} {{cancelado}}, {%endfor%}]
+                points: [{% for cancelado in cancelados %} {{cancelado}} {% if forloop.last != true %}, {% endif %}  {%endfor%}]
             }
         ]
     });
