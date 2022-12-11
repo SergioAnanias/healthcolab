@@ -57,7 +57,7 @@
             scale_type: 'stacked',
             label_text: 'Agendamientos'
         },
-        title_label_text: 'Mes N°{{dt | date:'m'}} del {{dt|date:'Y'}}',
+        title_label_text: 'Resumen estadístico ultimos 4 meses',
         xAxis_label_text:'Ultimos 4 meses',
         series: [
             {
@@ -96,6 +96,16 @@
                             {% for month in months %} 
                                 [
                                 '{{ month | date:'M'}}', {{ confirmados|index:forloop.counter0}}
+                                ],
+                            {%endfor%}
+                        ],
+            },
+            {
+                name: 'No asiste',
+                points:[
+                            {% for month in months %} 
+                                [
+                                '{{ month | date:'M'}}', {{ no_asisten|index:forloop.counter0}}
                                 ],
                             {%endfor%}
                         ],

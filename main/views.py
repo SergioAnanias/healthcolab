@@ -86,6 +86,7 @@ def home(request):
     confirmados=[]
     realizados=[]
     cancelados=[]
+    no_asisten=[]
     for month in months:
         agendado= Agenda.objects.filter(
             profesionales_rut=usuario['rut'],
@@ -111,10 +112,18 @@ def home(request):
             fecha__lt= (month - relativedelta(months=-1)).replace(day=1), 
             estado_idestado=Estado.objects.get(idestado=4),status=1
             ).count()
+        no_asiste=Agenda.objects.filter(
+            profesionales_rut=usuario['rut'],
+            fecha__gte=month.replace(day=1), 
+            fecha__lt= (month - relativedelta(months=-1)).replace(day=1), 
+            estado_idestado=Estado.objects.get(idestado=5),
+            status=1
+        ).count()
         cancelados.append(cancelado)
         confirmados.append(confirmado)
         agendados.append(agendado)
         realizados.append(realizado)
+        no_asisten.append(no_asiste)
     data = {
         'usuario':request.session['profesional'],
         'agendamientos':agendamientos,
@@ -128,6 +137,7 @@ def home(request):
         'agendados':agendados,
         'realizados':realizados,
         'cancelados':cancelados,
+        'no_asisten':no_asisten,
         'home_view':True
     }
     return render(request,'index.html',data)
