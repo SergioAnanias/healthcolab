@@ -39,9 +39,11 @@ class ProfesionalesManager(models.Manager):
             errors["age"] = "Debe ingresar una fecha de nacimiento valida"
         if len(postData["nregistro"])>0:
             NREGISTRO_REGEX = re.compile(r'^[0-9]{1,6}$')
+            if len(postData['nregistro'])!=6:
+                errors["nregistro"] = "Numero de registro no es valido"
             if not re.match(NREGISTRO_REGEX, postData["nregistro"]):
                 errors["nregistro"] = "Numero de registro no es valido"
-        elif len(postData)==0:
+        else:
             errors["nregistro"] = "Debe ingresar un numero de registro"
         return errors
 
@@ -93,9 +95,11 @@ class ProfesionalesManager(models.Manager):
             errors["age"] = "Debe ingresar una fecha de nacimiento valida"
         if len(postData["nregistro"])>0:
             NREGISTRO_REGEX = re.compile(r'^[0-9]{1,6}$')
+            if len(postData['nregistro'])!=6:
+                errors["nregistro"] = "Numero de registro no es valido"
             if not re.match(NREGISTRO_REGEX, postData["nregistro"]):
                 errors["nregistro"] = "Numero de registro no es valido"
-        elif len(postData)==0:
+        else:
             errors["nregistro"] = "Debe ingresar un numero de registro"
         return errors
 
