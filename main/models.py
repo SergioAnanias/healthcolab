@@ -54,7 +54,7 @@ class Pacientes(models.Model):
     status = models.IntegerField(blank=True, null=True)
     objects = PacientesManager()
     def profesionales(self):
-        return Ficha.objects.filter(pacientes_rut=self.rut)
+        return Ficha.objects.filter(pacientes_rut=self.rut, status=1)
 
 class Profesionales(models.Model):
     rut = models.CharField(db_column='RUT', primary_key=True, max_length=10)  # Field name made lowercase.

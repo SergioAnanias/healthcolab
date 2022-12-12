@@ -372,7 +372,7 @@ def edit_paciente(request,rutPaciente):
         if len(paciente) == 0 :
             return JsonResponse({'errors':['El rut del paciente no ha sido encontrado']},status=400)
         else:
-            Pacientes.objects.update(
+            paciente.update(
                 nombre= post_data["nombres"],
                 apellidos=post_data["apellidos"],
                 email=post_data["email"],
@@ -382,7 +382,7 @@ def edit_paciente(request,rutPaciente):
                 updated_at=datetime.now(),
                 status=1
             )
-        ficha = Ficha.objects.filter(profesionales_rut=request.session['profesional']['rut'], pacientes_rut=paciente[0])
+        ficha = Ficha.objects.filter(profesionales_rut=request.session['profesional']['rut'], pacientes_rut=paciente[0], status=1)
         if len(ficha)>0:
             ficha.update(motivoingreso=post_data['motivoConsulta'], status=1)
             return JsonResponse({'status':'ok'},status=200)
