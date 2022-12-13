@@ -64,7 +64,12 @@
                 name="nregistro" {% if usuario %} value = '{{usuario.numregistro}}'{% endif %}>
         </div>
         <div class="text-center form-group mt-5">
+            {% if usuario %}
+            <button class="btn-info btn" type="submit">Editar</button>
+            {% else %}
             <button class="btn-info btn" type="submit">Registrarse</button>
+            {% endif %}
+
         </div>
     </form>
 </div>
