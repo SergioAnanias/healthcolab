@@ -1,4 +1,5 @@
 HealthColab/settings.py
+.env
 # Django #
 *.log
 *.pot
@@ -9,7 +10,6 @@ media
 
 # Backup files # 
 *.bak 
-
 # If you are using PyCharm # 
 # User-specific stuff
 .idea/**/workspace.xml
